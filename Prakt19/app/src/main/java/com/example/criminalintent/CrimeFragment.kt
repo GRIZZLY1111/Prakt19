@@ -11,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.criminalintent.Crime.Crime
+import com.google.android.material.snackbar.Snackbar
 import java.util.Date
 
 class CrimeFragment: Fragment() {
@@ -36,8 +37,7 @@ class CrimeFragment: Fragment() {
     }
     override fun onStart() {
         super.onStart()
-        val titleWatcher = object :
-            TextWatcher
+        val titleWatcher = object : TextWatcher
         {
             override fun beforeTextChanged(
                 sequence: CharSequence?,
@@ -59,8 +59,20 @@ class CrimeFragment: Fragment() {
             }
         }
         titleField.addTextChangedListener(titleWatcher)
-        solvedCheckBox.apply {
-            setOnCheckedChangeListener { _, isChecked ->; crime.isSolved = isChecked }
+        solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            crime.isSolved = isChecked
+            val message = if (isChecked) {
+                "Преступление отмечено как решённое"
+            } else {
+                "Преступление отмечено как нерешённое"
+            }
+            if (isChecked){
+                dateButton.isEnabled=true
+            }
+            else{
+                dateButton.isEnabled=false
+            }
+            Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
         }
     }
 }
